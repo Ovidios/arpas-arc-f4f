@@ -115,8 +115,9 @@ export function gpsToMeters(
     const horizontalDistance = earthRadius * c; // Distance between points ignoring altitude
 
     // Compute displacement in X and Z using bearing direction
-    const x = horizontalDistance * Math.cos((lat1 + lat2) / 2); // East/West direction
-    const z = horizontalDistance * Math.sin((lat1 + lat2) / 2); // North/South direction
+    // See "Bearing" @ https://www.movable-type.co.uk/scripts/latlong.html
+    const x = horizontalDistance * Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+    const z = horizontalDistance * Math.sin(lon2 - lon1) * Math.cos(lat2);
 
     // Altitude difference (vertical movement)
     const y = (targetCoords.altitude ?? 0) - (originCoords.altitude ?? 0);
