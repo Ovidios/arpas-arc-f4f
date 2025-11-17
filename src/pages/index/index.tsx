@@ -17,6 +17,9 @@ import { MinioData } from "../../types/databaseData";
 import { useWorldRotation, useWorldPosition } from "../../hooks";
 import { useCommentsStore } from "../../store/commentsStore";
 import { useRatingStore } from "../../store/ratingStore";
+import { NavMap } from "../../components-ui/navmap";
+import { NavNode } from "../../types/navNode";
+import navNetworkJson from "../../components-ui/navmap/nav_network_home.json";
 
 const debounce = (func: () => void, delay: number) => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -147,6 +150,26 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
         }
     }, [camera.position.x, camera.position.z]);
 
+    // Create Nav Node Network
+    const nodes: NavNode[] = [];
+
+    // fill nodes array with NavNodes
+    navNetworkJson.nodes.forEach((node, i) => {
+        nodes.push(new NavNode(i, [node.position[0], node.position[1]]));
+    })
+
+    // Create connections
+    navNetworkJson.connections.forEach(conn => {
+        conn.forEach(nodeIndex1 => {
+        const node1 = nodes[nodeIndex1];
+        conn.forEach(nodeIndex2 => {
+            if (nodeIndex1 == nodeIndex2) return;
+            const node2 = nodes[nodeIndex2];
+            node1.addNeighbor(node2);
+        })
+        });
+    })
+
     return (
         <>
             <XRDomOverlay style={{ width: "100%", height: "100%", fontSize: `${fontSize}px`, boxSizing: "border-box" }}>
@@ -237,6 +260,13 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
                     <ambientLight intensity={5} />
                     <directionalLight intensity={10} />
                     <Compass3D headingInRad={worldRotation} cameraPosition={compassPosition} />
+                    <NavMap
+                        worldPosition={worldPosition}
+                        worldRotation={worldRotation}
+                        nodes={nodes}
+                        originNode={nodes[3]}
+                        targetNode={nodes[4]}
+                    />
 
                     <ObjectScene
                         selectedVariants={selectedVariants}
