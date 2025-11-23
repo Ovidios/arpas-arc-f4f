@@ -67,35 +67,59 @@ const questions: Question[] = [
   }
 ];
 
+const QUESTION_TIME = 15;
+
 function Quiz() {
   const [current, setCurrent] = useState(0);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0); // enthält Punkte inkl. Bonus
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [answered, setAnswered] = useState(false);
 
+  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+
+  const q = questions[current];
+
+  // Confetti bei 100% + Bonus
   useEffect(() => {
-    if (showResult && score === questions.length) {
+    if (showResult && score > questions.length) {
       confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 },
+        particleCount: 200,
+        spread: 80,
+        origin: { y: 0.6 }
       });
     }
   }, [showResult, score]);
 
-  const q = questions[current];
+  // TIMER
+  useEffect(() => {
+    if (!answered) {
+      const interval = setInterval(() => {
+        setTimeLeft((t) => (t > 0 ? t - 1 : 0));
+      }, 1000);
 
+      return () => clearInterval(interval);
+    }
+  }, [answered]);
+
+  // Antwort auswählen
   const handleSelect = (index: number) => {
     if (answered) return;
+
     setSelected(index);
     setAnswered(true);
-    if (index === q.correct) setScore(score + 1);
+
+    if (index === q.correct) {
+      const bonus = Math.floor(timeLeft / 2);
+      setScore((prev) => prev + 1 + bonus);
+    }
   };
 
   const handleNext = () => {
     setSelected(null);
     setAnswered(false);
+    setTimeLeft(QUESTION_TIME);
+
     if (current + 1 < questions.length) {
       setCurrent(current + 1);
     } else {
@@ -109,27 +133,35 @@ function Quiz() {
     setSelected(null);
     setAnswered(false);
     setShowResult(false);
+    setTimeLeft(QUESTION_TIME);
   };
+
+  // Fortschrittsbalken berechnen
+  const progress = ((current + 1) / questions.length) * 100;
 
   return (
     <div className="quiz-container">
       <h1>Future-Food-Quiz</h1>
 
-      {/* Fortschrittsanzeige */}
-      <div className="progress-wrapper">
-        <div
-          className="progress-bar"
-          style={{ width: `${((current + 1) / questions.length) * 100}%` }}
-        ></div>
-      </div>
-
-      <p className="progress-text">
-        Frage {current + 1} von {questions.length}
-      </p>
-
       {!showResult ? (
         <>
+          {/* Fortschritt */}
+          <div className="progress-text">
+            Frage {current + 1} von {questions.length}
+          </div>
+
+          <div className="progress-wrapper">
+            <div
+              className="progress-bar"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          {/* Timer */}
+          <p className="timer">⏱️ {timeLeft} Sekunden</p>
+
           <p>{q.question}</p>
+
           <div>
             {q.options.map((opt, idx) => {
               let className = "option-btn";
@@ -137,6 +169,7 @@ function Quiz() {
                 if (idx === q.correct) className += " correct";
                 else if (idx === selected) className += " wrong";
               }
+
               return (
                 <button
                   key={idx}
@@ -148,6 +181,7 @@ function Quiz() {
               );
             })}
           </div>
+
           {answered && (
             <button onClick={handleNext} style={{ marginTop: "10px" }}>
               Weiter
@@ -157,9 +191,11 @@ function Quiz() {
       ) : (
         <>
           <h2>Ergebnis</h2>
-          <p>Du hast {score} von {questions.length} Fragen richtig!</p>
-          {score === questions.length ? (
-            <p id="badge">🏅 Future-Food-Expert!</p>
+
+          <p>Du hast insgesamt <b>{score}</b> Punkte erreicht!</p>
+
+          {score > questions.length ? (
+            <p id="badge">🏅 Future-Food-Quiz-Experte!</p>
           ) : (
             <p id="badge" style={{ color: "#f39c12" }}>
               Fast geschafft! Versuch es nochmal!
@@ -173,4 +209,4 @@ function Quiz() {
   );
 }
 
-export default Quiz;    
+export default Quiz;
