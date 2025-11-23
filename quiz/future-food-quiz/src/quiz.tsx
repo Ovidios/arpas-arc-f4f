@@ -110,10 +110,23 @@ function Quiz() {
     setAnswered(false);
     setShowResult(false);
   };
-  
+
   return (
     <div className="quiz-container">
       <h1>Future-Food-Quiz</h1>
+
+      {/* Fortschrittsanzeige */}
+      <div className="progress-wrapper">
+        <div
+          className="progress-bar"
+          style={{ width: `${((current + 1) / questions.length) * 100}%` }}
+        ></div>
+      </div>
+
+      <p className="progress-text">
+        Frage {current + 1} von {questions.length}
+      </p>
+
       {!showResult ? (
         <>
           <p>{q.question}</p>
@@ -148,8 +161,11 @@ function Quiz() {
           {score === questions.length ? (
             <p id="badge">🏅 Future-Food-Expert!</p>
           ) : (
-            <p id="badge" style={{ color: '#f39c12' }}>Fast geschafft! Versuch es nochmal!</p>
+            <p id="badge" style={{ color: "#f39c12" }}>
+              Fast geschafft! Versuch es nochmal!
+            </p>
           )}
+
           <button onClick={handleRestart}>Nochmal spielen</button>
         </>
       )}
@@ -157,4 +173,4 @@ function Quiz() {
   );
 }
 
-export default Quiz;
+export default Quiz;    
