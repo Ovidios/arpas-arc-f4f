@@ -9,6 +9,8 @@ interface Question {
   icons: string[];
 }
 
+
+
 const questions: Question[] = [
   {
     question: "Warum werden Quallen als mögliche Nahrungsquelle erforscht?",
@@ -72,10 +74,10 @@ const QUESTION_TIME = 15;
 function Quiz() {
   const [current, setCurrent] = useState(0);
 
-  // Score = Basis + Bonus
+  // Score 
   const [score, setScore] = useState(0);
 
-  // NEU: Richtige Antworten separat speichern
+  // Richtige Antworten separat speichern
   const [correctCount, setCorrectCount] = useState(0);
 
   const [selected, setSelected] = useState<number | null>(null);
@@ -86,7 +88,7 @@ function Quiz() {
 
   const q = questions[current];
 
-  // 🎉 Konfetti NUR wenn ALLE richtig beantwortet wurden
+  // Konfetti NUR wenn ALLE richtig beantwortet wurden
   useEffect(() => {
     if (showResult && correctCount === questions.length) {
       confetti({
@@ -120,7 +122,7 @@ function Quiz() {
       const bonus = Math.floor(timeLeft / 2);
       setScore((prev) => prev + 1 + bonus);
 
-      // 🎯 Nur 1 Punkt für richtige Antwort (für Experten-Check)
+      // Nur 1 Punkt für richtige Antwort (für Experten-Check)
       setCorrectCount((prev) => prev + 1);
     }
   };
