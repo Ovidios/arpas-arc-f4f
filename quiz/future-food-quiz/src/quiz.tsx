@@ -71,7 +71,13 @@ const QUESTION_TIME = 15;
 
 function Quiz() {
   const [current, setCurrent] = useState(0);
-  const [score, setScore] = useState(0); // enthält Punkte inkl. Bonus
+
+  // Score = Basis + Bonus
+  const [score, setScore] = useState(0);
+
+  // NEU: Richtige Antworten separat speichern
+  const [correctCount, setCorrectCount] = useState(0);
+
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [answered, setAnswered] = useState(false);
@@ -80,16 +86,16 @@ function Quiz() {
 
   const q = questions[current];
 
-  // Confetti bei 100% + Bonus
+  // 🎉 Konfetti NUR wenn ALLE richtig beantwortet wurden
   useEffect(() => {
-    if (showResult && score > questions.length) {
+    if (showResult && correctCount === questions.length) {
       confetti({
         particleCount: 200,
         spread: 80,
         origin: { y: 0.6 }
       });
     }
-  }, [showResult, score]);
+  }, [showResult, correctCount]);
 
   // TIMER
   useEffect(() => {
@@ -110,8 +116,12 @@ function Quiz() {
     setAnswered(true);
 
     if (index === q.correct) {
+      // ⚡ Bonus-Punkte: bleibt wie gehabt
       const bonus = Math.floor(timeLeft / 2);
       setScore((prev) => prev + 1 + bonus);
+
+      // 🎯 Nur 1 Punkt für richtige Antwort (für Experten-Check)
+      setCorrectCount((prev) => prev + 1);
     }
   };
 
@@ -130,13 +140,13 @@ function Quiz() {
   const handleRestart = () => {
     setCurrent(0);
     setScore(0);
+    setCorrectCount(0);
     setSelected(null);
     setAnswered(false);
     setShowResult(false);
     setTimeLeft(QUESTION_TIME);
   };
 
-  // Fortschrittsbalken berechnen
   const progress = ((current + 1) / questions.length) * 100;
 
   return (
@@ -194,7 +204,8 @@ function Quiz() {
 
           <p>Du hast insgesamt <b>{score}</b> Punkte erreicht!</p>
 
-          {score > questions.length ? (
+          {/* ⭐ Speziallogik: ALLES richtig → Experte */}
+          {correctCount === questions.length ? (
             <p id="badge">🏅 Future-Food-Quiz-Experte!</p>
           ) : (
             <p id="badge" style={{ color: "#f39c12" }}>
