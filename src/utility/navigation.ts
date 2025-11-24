@@ -53,3 +53,9 @@ export const calculateRoute = (originNode: NavNode, targetNode: NavNode) => {
         })
     }
 }
+
+export const getClosestNode = (nodes: NavNode[], lat: number, long: number) => {
+    return nodes.toSorted((a, b) => {
+        return a.distanceToPosition(lat, long) - b.distanceToPosition(lat, long);
+    })[0];
+}

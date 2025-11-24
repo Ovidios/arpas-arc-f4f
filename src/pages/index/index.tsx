@@ -19,7 +19,7 @@ import { useCommentsStore } from "../../store/commentsStore";
 import { useRatingStore } from "../../store/ratingStore";
 import { NavMap } from "../../components-ui/navmap";
 import { NavNode } from "../../types/navNode";
-import navNetworkJson from "../../components-ui/navmap/nav_network_home.json";
+import navNetworkJson from "../../components-ui/navmap/nav_network.json";
 
 const debounce = (func: () => void, delay: number) => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -261,11 +261,11 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
                     <directionalLight intensity={10} />
                     <Compass3D headingInRad={worldRotation} cameraPosition={compassPosition} />
                     <NavMap
+                        cameraPosition={cameraPositionMemo}
                         worldPosition={worldPosition}
                         worldRotation={worldRotation}
                         nodes={nodes}
-                        originNode={nodes[3]}
-                        targetNode={nodes[4]}
+                        targetNode={nodes[7]}
                     />
 
                     <ObjectScene

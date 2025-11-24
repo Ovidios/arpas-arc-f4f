@@ -12,12 +12,18 @@ export class NavNode {
         this.neighbors.push(neighbor);
     }
 
-    // source: https://www.movable-type.co.uk/scripts/latlong.html
     distanceTo(other: NavNode) {
-        const lat1 = other.position[0] * Math.PI/180;
+        return this.distanceToPosition(other.position[0], other.position[1]);
+    }
+
+    // source: https://www.movable-type.co.uk/scripts/latlong.html
+    distanceToPosition(lat1: number, lon1: number) {
+        lat1 *= Math.PI/180;
+        lon1 *= Math.PI/180;
         const lat2 = this.position[0] * Math.PI/180;
-        const deltaLat = (this.position[0]-other.position[0]) * Math.PI/180
-        const deltaLon = (this.position[1]-other.position[1]) * Math.PI/180
+        const lon2 = this.position[1] * Math.PI/180;
+        const deltaLat = lat2 - lat1;
+        const deltaLon = lon2 - lon1
         const radius = 6371000; // approximate radius of earth in meters
 
         const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +

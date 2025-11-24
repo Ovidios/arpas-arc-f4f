@@ -1,16 +1,26 @@
 import * as THREE from "three";
 import { useRef } from "react";
 import { NavNode } from "../../types/navNode";
-import { calculateRoute } from "../../utility/navigation";
+import { calculateRoute, getClosestNode } from "../../utility/navigation";
 import { Position } from "../../types/transform";
 import useLocationStore from "../../store/locationStore";
+import useGeolocation from "../../hooks/geolocation/useGeolocation";
 
 const NavMap = ({ worldPosition, worldRotation, nodes, originNode, targetNode }: { worldPosition: Position, worldRotation: number, nodes: NavNode[], originNode?: NavNode, targetNode?: NavNode }) => {
     const navRef = useRef<THREE.Group>(null);
     const getPosition = useLocationStore(state => state.getPosition);
-    const path = (originNode == undefined || targetNode == undefined) ? undefined : calculateRoute(originNode, targetNode);
 
-    console.log(worldPosition);
+    const [currentGeolocation, accurateGeolocation] = useGeolocation(5);
+
+    if (originNode == undefined) {
+        const lat = currentGeolocation?.coords.latitude;
+        const long = currentGeolocation?.coords.longitude;
+        if (lat !== undefined && long !== undefined) {
+            originNode = getClosestNode(nodes, lat, long);
+        }
+    }
+
+    const path = (originNode == undefined || targetNode == undefined) ? undefined : calculateRoute(originNode, targetNode);
 
     return (
         <group rotation={[0, -worldRotation - Math.PI / 2, 0]}>
