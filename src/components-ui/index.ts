@@ -7,3 +7,4 @@ export { default as SideSheet } from "./sideSheet";
 export { default as HelpMenu } from "./sideSheet/helpMenu";
 export { default as DirectionalArrow } from "./directionalArrow";
 export { default as Keyboard } from "./keyboard";
+export { default as CharacterOverlay } from "./characterOverlay";

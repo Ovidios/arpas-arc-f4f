@@ -17,6 +17,12 @@ import { MinioData } from "../../types/databaseData";
 import { useWorldRotation, useWorldPosition } from "../../hooks";
 import { useCommentsStore } from "../../store/commentsStore";
 import { useRatingStore } from "../../store/ratingStore";
+import characterDialogs from "../../data/characterDialogs.json";
+import { CharacterDialogMap } from "../../types/characterDialog";
+import useLocationStore from "../../store/locationStore";
+import { CharacterOverlay } from "../../components-ui";
+import characterZones from "../../data/characterZones.json";
+
 
 const debounce = (func: () => void, delay: number) => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -35,6 +41,12 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
     const { messages, addScreenMessage, removeScreenMessage } = useMessageStore();
     const groundMesh = store.getState().groundMesh;
     const [minioClientData, setMinioClientData] = useState<MinioData | null>(null);
+
+    const dialogContent: CharacterDialogMap = characterDialogs;
+
+    const getPosition = useLocationStore((state) => state.getPosition);
+    const [dialogKey, setDialogKey] = useState("default");
+    const [characterLines, setCharacterLines] = useState(dialogContent.default?.lines ?? []);
 
     // UI values
     const fontSize = 22;
@@ -60,6 +72,40 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
     const setCurrentVariant = useCallback((objectId: number, variantId: number) => {
         setSelectedVariants((prev) => ({ ...prev, [objectId]: variantId }));
     }, []);
+
+    const closestSceneObject = useMemo(() => {
+        if (!scene.objects?.length) return null;
+        return getClosestObject(worldPosition, scene.objects, selectedVariants, getPosition);
+    }, [scene.objects, worldPosition, selectedVariants, getPosition]);
+
+    const zonesWithPosition = useMemo(
+        () => characterZones.map((z) => ({
+            ...z,
+            position: getPosition(z.geo.lat, z.geo.lon)
+        })),
+        [getPosition]
+    );
+    const currentZone = useMemo(() => {
+        if (!worldPosition) return null;
+        return zonesWithPosition.find((z) => worldPosition.distanceTo(z.position) <= z.geo.radiusM);
+    }, [zonesWithPosition, worldPosition]);
+
+    useEffect(() => {
+        if (currentZone) {
+            const zoneKey = currentZone.id;
+            setDialogKey(dialogContent[zoneKey] ? zoneKey : "default");
+            return;
+        }
+        const candidate =
+            closestSceneObject?.sceneObject?.qr_id ||
+            closestSceneObject?.sceneObject?.name ||
+            (closestSceneObject?.sceneObject ? `object-${closestSceneObject.sceneObject.id}` : "default");
+        setDialogKey(dialogContent[candidate] ? candidate : "default");
+    }, [currentZone, closestSceneObject]);
+
+    useEffect(() => {
+        setCharacterLines(dialogContent[dialogKey]?.lines ?? dialogContent.default?.lines ?? []);
+    }, [dialogKey]);
 
     // Apply data
     useEffect(() => {
@@ -92,7 +138,7 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
         // setSelectedObject(sceneData.objects[0]?.id ?? null);
     }, [contentTypes, sceneData]);
 
-     useEffect(() => {
+    useEffect(() => {
         console.log('Topic data updated:', topicData);
     }, [topicData]);
 
@@ -165,6 +211,11 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
                     onLeave={() => store.getState().session?.end()}
                     fontSize={fontSize}
                 />
+                <CharacterOverlay
+                    lines={characterLines}
+                    characterImageSrc={`${import.meta.env.BASE_URL}images/character/guide.png`}
+                />
+
 
                 {/* Content */}
                 <div style={{ top: `${headerHeight}px` }}>
@@ -209,8 +260,8 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
 
                 {/* Footer */}
                 {/* <Footer>
-                  <small className="text-dark">Selected: {selectedObject ?? "None"}</small>
-                  <small className="text-muted">Heading: {worldRotation.toFixed(2)} rad</small>
+                    <small className="text-dark">Selected: {selectedObject ?? "None"}</small>
+                    <small className="text-muted">Heading: {worldRotation.toFixed(2)} rad</small>
                 </Footer> */}
 
                 {/* Debugging box can be removed or kept */}

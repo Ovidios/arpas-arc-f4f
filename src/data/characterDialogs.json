@@ -1,0 +1,37 @@
+{
+    "default": {
+        "lines": [
+            "Willkommen auf dem Campus!",
+            "Mein Name ist Nori. Ich bin dein Begleiter und werde dir helfen alle Herausforderungen zu meistern",
+            "Versuche so viele Stationen wie möglich zu besuchen.",
+            "Folge den Pfeilen. Sie zeigen dir den nächsten spannenden Ort.",
+            "Viel Spaß beim Erkunden!"
+        ]
+    },
+    "campus-entry": {
+        "lines": [
+            "Du bist beim Haupteingang. Hol dir zuerst einen Überblick.",
+            "(Funktionen erklären) Teste die Karte/Kompass. Er zeigt dir den schnellsten Weg zur ersten Station.",
+            "Bereit? Dann lass uns loslegen!"
+        ]
+    },
+    "library": {
+        "lines": [
+            "Wir nähern uns der Bibliothek.",
+            "Hier findest du Infos zu ...",
+            "Schau dich um und versuche die Herausforderung abzuschließen"
+        ]
+    },
+    "cafeteria": {
+        "lines": [
+            "Zeit für eine Pause? Die Mensa ist gleich hier.",
+            "Schau dir an, wie aus deinen gesammelten Ressourcen eine leckere Mahlzeit wird",
+            "(oder) Sammle hier deine 3D Zutaten und schau dir an, wie deinw Future-Food Mahlzeit aussehen würde."
+        ]
+    },
+     "h-gebäude": {
+        "lines": [
+            "Du befindest dich im H Gebäude"
+        ]
+    }
+}
