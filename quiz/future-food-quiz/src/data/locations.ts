@@ -41,7 +41,7 @@ export const quizLocations = [
   id: "duaa",
   name: "Duaa (Test-Ort)",
   coords: { lat: 52.540636660690225, lon: 13.391817612557453 },  
-  radius: 200,
+  radius: 50,
   quizFile: "quiz_duaa.json"
 },
 {// Gebäude H

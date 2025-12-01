@@ -6,10 +6,10 @@ interface Question {
   question: string;
   options: string[];
   correct: number;
-  icons?: string[]; // Optional
+  icons?: string[];
 }
 
-const QUESTION_TIME = 15; // Sekunden pro Frage
+const QUESTION_TIME = 15;
 
 function Quiz({ questions }: { questions: Question[] }) {
   const [current, setCurrent] = useState(0);
@@ -22,17 +22,26 @@ function Quiz({ questions }: { questions: Question[] }) {
 
   const q = questions[current];
 
-  // Timer pro Frage
+  // TIMER
   useEffect(() => {
-    if (!answered) {
-      const interval = setInterval(() => {
-        setTimeLeft((t) => (t > 0 ? t - 1 : 0));
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [answered]);
+    if (answered || showResult) return;
 
-  // Konfetti bei allen richtigen Antworten
+    const interval = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          setAnswered(true);
+          setSelected(null);
+          clearInterval(interval);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [answered, showResult]);
+
+  // KONFETTI NUR BEI 100% RICHTIG
   useEffect(() => {
     if (showResult && correctCount === questions.length) {
       confetti({
@@ -41,15 +50,15 @@ function Quiz({ questions }: { questions: Question[] }) {
         origin: { y: 0.6 },
       });
     }
-  }, [showResult, correctCount]);
+  }, [showResult, correctCount, questions.length]);
 
   const handleSelect = (index: number) => {
     if (answered) return;
+
     setSelected(index);
     setAnswered(true);
 
     if (index === q.correct) {
-      // Punkte + 1 für richtig
       setScore((prev) => prev + 1);
       setCorrectCount((prev) => prev + 1);
     }
@@ -79,20 +88,17 @@ function Quiz({ questions }: { questions: Question[] }) {
 
   const progress = ((current + 1) / questions.length) * 100;
 
-  if (!questions || questions.length === 0) {
-    return <p>Keine Quizfragen verfügbar.</p>;
-  }
-
   return (
     <div className="quiz-container">
+
       {!showResult ? (
         <>
-          <h2>{q.question}</h2>
 
-          {/* Fortschrittsanzeige */}
+          {/* ✅ FORTSCHRITT */}
           <div className="progress-text">
             Frage {current + 1} von {questions.length}
           </div>
+
           <div className="progress-wrapper">
             <div
               className="progress-bar"
@@ -100,17 +106,22 @@ function Quiz({ questions }: { questions: Question[] }) {
             ></div>
           </div>
 
-          {/* Timer */}
-          <p className="timer">⏱️ {timeLeft} Sekunden</p>
+          {/* ✅ TIMER */}
+          <p className="timer">⏱ Noch {timeLeft} Sekunden</p>
 
-          {/* Optionen mit Icons */}
+          {/* ✅ FRAGE */}
+          <h2>{q.question}</h2>
+
+          {/* ✅ OPTIONEN */}
           <div>
             {q.options.map((opt, i) => {
               let className = "option-btn";
+
               if (answered) {
                 if (i === q.correct) className += " correct";
                 else if (selected === i) className += " wrong";
               }
+
               return (
                 <button
                   key={i}
@@ -130,14 +141,12 @@ function Quiz({ questions }: { questions: Question[] }) {
               Weiter
             </button>
           )}
+
         </>
       ) : (
         <>
-          {/* Ergebnis */}
           <h2>Ergebnis</h2>
-          <p>
-            Du hast insgesamt <b>{score}</b> Punkte erreicht!
-          </p>
+          <p><b>{score}</b> Punkte erreicht</p>
 
           {correctCount === questions.length ? (
             <p id="badge">🏅 Future-Food-Quiz-Experte!</p>

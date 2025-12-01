@@ -40,3 +40,28 @@ button:hover {
 .wrong {
   background-color: #f4b7b7 !important; /* ✅ hellrot */
 }
+
+/* Global für die gesamte App */
+body, html, #root {
+  font-family: 'Exo 2', Arial, sans-serif;
+  line-height: 1.5; /* 150% Zeilenabstand */
+  font-weight: 300; /* Default: Light */
+  color: #242424; /* Standardfarbe, optional anpassen */
+  background-color: #ffffff; /* Weißer Hintergrund */
+}
+
+/* Headlines */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300; /* Light */
+  line-height: 1.6; /* 160% für Headlines */
+}
+
+/* Hervorhebungen */
+strong, b {
+  font-weight: 600; /* Semi Bold */
+}
+
+/* Optional: kleinere Elemente, Fließtext */
+p, li, span {
+  font-weight: 300; /* Light */
+}
