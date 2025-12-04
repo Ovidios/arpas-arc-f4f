@@ -21,6 +21,7 @@
         "prepare": "npm run build"
     },
     "dependencies": {
+        "canvas-confetti": "^1.9.4",
         "react-simple-keyboard": "^3.8.74",
         "web-vitals": "^2.1.4"
     },
@@ -70,8 +71,8 @@
         "zustand": "^4.5.7"
     },
     "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.41.0",
-        "@rollup/rollup-darwin-arm64": "4.41.0"
+        "@rollup/rollup-darwin-arm64": "4.41.0",
+        "@rollup/rollup-linux-x64-gnu": "4.41.0"
     },
     "overrides": {
         "three": "^0.175.0"
