@@ -1,7 +1,27 @@
 [
-    {
-      "question": "Wozu dienen Quellenlabore?",
-      "options": ["Wasseranalyse", "Pizza backen", "3D-Druck", "Musikproduktion"],
-      "correct": 0
-    }
-  ]
+  {
+    "question": "Warum werden Quallen als Nahrungsmittel erforscht?",
+    "options": ["Sie sind giftig", "Sie sind selten", "Sie könnten eine neue Proteinquelle sein"],
+    "correct": 2
+  },
+  {
+    "question": "Warum sind flache Gewässer mit Mikroalgen wichtig für Quallen?",
+    "options": ["Sie machen Wasser trüb", "Sie sind ihre Lebensgrundlage", "Sie töten Quallen"],
+    "correct": 1
+  },
+  {
+    "question": "Was bedeutet „Symbiose“ bei Quallen?",
+    "options": ["Kampf zwischen Arten", "Zusammenleben mit Mikroalgen zum Vorteil beider", "Krankheit"],
+    "correct": 1
+  },
+  {
+    "question": "Warum sind Mangrovenquallen besonders geeignet für die Stadt?",
+    "options": ["Sie brauchen wenig Platz und wachsen in Indoor-Anlagen", "Sie brauchen große Ozeane", "Sie brauchen viel Frischwasser"],
+    "correct": 0
+  },
+  {
+    "question": "Warum sind Mikroalgen für Quallen lebenswichtig?",
+    "options": ["Sie machen das Wasser sauber", "Sie liefern Energie durch Licht (Photosynthese)", "Sie schützen vor Fischen"],
+    "correct": 1
+  }
+]

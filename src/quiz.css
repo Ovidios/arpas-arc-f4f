@@ -1,3 +1,6 @@
+/* Exo 2 Schrift importieren */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap');
+
 /* Grundlegendes Box-Sizing */
 * {
   box-sizing: border-box;
@@ -49,14 +52,22 @@ p, li, span {
   height: 10px;
   background: #ddd;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   overflow: hidden;
+  position: relative; /* absolut positionierte progress-bar relativ dazu */
+  min-height: 10px; /* erzwingt Sichtbarkeit */
+  display: flex;
+  align-items: center;
 }
 
 .progress-bar {
-  height: 10px;
+  height: 100%;
   background: #4caf50;
+  width: 0%; /* default, wird per React gesetzt */
   transition: width 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 
@@ -65,14 +76,6 @@ p, li, span {
   margin-bottom: 15px;
   color: #111111; /* Schwarz */
   text-align: center;
-}
-
-/* Timer */
-.timer {
-  font-size: 18px;
-  font-weight: bold;
-  color: #d9534f;
-  margin-bottom: 15px;
 }
 
 /* Optionen */
@@ -393,5 +396,56 @@ p, li, span {
   10% { opacity: 1; transform: translateY(0); }
   90% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-10px); }
+}
+
+
+/* Grundlegendes für das gesamte Quiz */
+.quiz-container, 
+.quiz-overlay, 
+.quiz-container * {
+  font-family: 'Exo 2', sans-serif;
+  line-height: 1.5; /* 150% Zeilenabstand, optional 2.0 für 200% */
+  color: #111111;
+}
+
+/* Headlines */
+.quiz-container h1,
+.quiz-container h2,
+.quiz-container h3,
+.quiz-container h4,
+.quiz-container h5,
+.quiz-container h6 {
+  font-weight: 300; /* Light für Headlines */
+  line-height: 1.6; /* 160% Zeilenhöhe für Headlines */
+  text-align: center;
+}
+
+/* Fließtext */
+.quiz-container p,
+.quiz-container li,
+.quiz-container span {
+  font-weight: 300; /* Light für Fließtext */
+  line-height: 1.5;
+  color: #111111;
+}
+
+/* Hervorhebungen */
+.quiz-container strong,
+.quiz-container b {
+  font-weight: 600; /* Semi Bold */
+}
+
+.quiz-container button {
+  font-family: 'Exo 2', sans-serif;
+}
+
+/* Timer */
+.quiz-container .timer {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #d9534f !important; 
+  margin-bottom: 15px;
+  text-align: center;
 }
 

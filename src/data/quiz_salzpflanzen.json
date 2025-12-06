@@ -1,7 +1,28 @@
 [
-    {
-      "question": "Was sind Salzpflanzen?",
-      "options": ["Salztolerante Pflanzen", "Wasserscheu", "Giftig", "Nur Wüste"],
-      "correct": 0
-    }
-  ]
+  
+  {
+    "question": "Was sind Salzpflanzen (Halophyten)?",
+    "options": ["Pflanzen, die nur im Wald wachsen", "Pflanzen, die in salzigen Böden wachsen können", "Zimmerpflanzen"],
+    "correct": 1
+  },
+  {
+    "question": "Warum sind Salzpflanzen für die Zukunft wichtig?",
+    "options": ["Sie wachsen überall", "Sie brauchen kein Frischwasser", ""],
+    "correct": 1
+  },
+  {
+    "question": "Wo wachsen Salzpflanzen oft natürlich?",
+    "options": ["An Küsten", "In Wüsten", "Im Gebirge"],
+    "correct": 0
+  },
+  {
+    "question": "Was ist das Besondere an Halophyten?",
+    "options": ["Sie entziehen dem Boden Salz und machen ihn nutzbar", "Sie sterben bei Salz", "Sie wachsen nur im Süßwasser"],
+    "correct": 0
+  },
+  {
+    "question": "Warum sind Salzpflanzen wichtig für Küstenregionen?",
+    "options": ["Sie verhindern Sturm", "Sie wachsen nur im Meer", "Sie liefern Nahrung auch bei salzigem Boden"],
+    "correct": 2
+  }
+]

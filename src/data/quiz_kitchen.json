@@ -1,7 +1,32 @@
 [
-    {
-      "question": "Warum werden Quallen als mögliche Nahrungsquelle erforscht?",
-      "options": ["Hoher Proteinwert", "Wegen Zucker", "Leuchten im Dunkeln", "Weil sie niedlich sind"],
-      "correct": 0
-    }
-  ]
+  {
+    "question": "Was bedeutet „Future Food“?",
+    "options": ["Nachhaltig erzeugte Lebensmittel der Zukunft", "Essen aus dem Supermarkt", "Nahrung billig produzieren"],
+    "correct": 0
+  },
+  {
+    "question": "Warum werden Insekten als Nahrungsmittel immer wichtiger?",
+    "options": ["Sie brauchen viel Platz", "Sie sind proteinreich und umweltfreundlich", "Sie sind teuer"],
+    "correct": 1
+  },
+  {
+    "question": "Was ist ein Ziel nachhaltiger Ernährung?",
+    "options": ["Mehr Wegwerfen", "Gesunde Lebensmittel für alle Menschen", "Nur Fleisch essen"],
+    "correct": 1
+  },
+  {
+    "question": "Warum soll Essen in Zukunft mehr in Städten produziert werden?",
+    "options": ["Weil dort mehr Platz ist", "Weil Transportwege kürzer und Ressourcen geschont werden", "Weil es dort wärmer ist"],
+    "correct": 1
+  },
+  {
+    "question": "Was bedeutet „innerhalb planetarer Grenzen“?",
+    "options": ["Essen darf nur aus der Region kommen", "Lebensmittel dürfen teuer sein", "Die Umwelt wird geschont und nicht überlastet"],
+    "correct": 2
+  }, 
+  {
+    "question": "Warum sind Makroalgen, Quallen, Salzpflanzen und Grillen wichtig für die Zukunft?",
+    "options": ["Sie sind exotisch", "Sie können auch unter schwierigen Bedingungen Nahrung liefern", "Sie sind teuer"],
+    "correct": 1
+  }
+]

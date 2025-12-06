@@ -16,7 +16,8 @@ export const quizLocations = [
     {
       id: "quellen",
       name: "Bibliothek – Quellenlabor",
-      coords: { lat: 52.455524445488415, lon: 13.524730308877778 },
+     // coords: { lat: 52.455524445488415, lon: 13.524730308877778 },
+      coords: { lat: 52.540636660690225, lon: 13.391817612557453 },
       radius: 50,
       quizFile: "quiz_quellen.json"
     },
@@ -33,26 +34,13 @@ export const quizLocations = [
       coords: { lat: 52.455596084675975, lon: 13.526818004625984 },
       radius: 50,
       quizFile: "quiz_grillen.json"
-    },
+    }
 
-// löschen später zum testen für mich
-
-{ // 50 m hat nur geklappt 
-  id: "duaa",
-  name: "Duaa (Test-Ort)",
- // coords: { lat: 52.45513200191987, lon: 13.52537978909434 },  
- coords: { lat: 52.540636660690225, lon: 13.391817612557453 },  
-  radius: 50,
-  quizFile: "quiz_duaa.json"
-},
-{// Gebäude H 30 m hat geklappt
-  id: "besprechungsraum ",
-  name: "Besprechungsraum (Test-Ort)",
-  coords: { lat: 52.45513200191987, lon: 13.52537978909434 },  
-  radius: 30,
-  quizFile: "quiz_besprechungsraum.json"
-}
-
+// Gebäude H 30 m hat geklappt  
+ // Besprechungs raum  coords: { lat: 52.45513200191987, lon: 13.52537978909434 },  
+  
+// 50 m hat nur geklappt 
+// Meine Koordinaten coords: { lat: 52.540636660690225, lon: 13.391817612557453 },  
 
 
   ];

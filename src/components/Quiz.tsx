@@ -107,8 +107,11 @@ const Quiz: React.FC<QuizProps> = ({ questions, onClose }) => {
       {/* Fortschritt, Frage, Optionen */}
       <div className="progress-text">Frage {current + 1} von {questions.length}</div>
       <div className="progress-wrapper">
-        <div className="progress-bar" style={{ width: `${progress}%` }} />
-      </div>
+  <div
+    className="progress-bar"
+    style={{ width: `${progress}%` }} // immer berechnet
+  />
+</div>
 
       <p className="timer centered">⏱️ {timeLeft} Sekunden</p>
       <h2 className="centered">{q.question}</h2>
