@@ -2,9 +2,10 @@ import { XR, IfInSessionMode, createXRStore } from "@react-three/xr";
 import { Canvas } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import { useEffect, useState } from "react";
-import QuizPlane from "./components/QuizPlane";
 
+import QuizPlane from "./components/QuizPlane";
 import IndexPage from "./pages/index";
+
 import { quizLocations } from "./data/locations";
 import { distanceInMeters } from "./utility/geo";
 
@@ -12,6 +13,7 @@ import { SceneData } from "./types/objectData";
 import { TopicData } from "./types/topicData";
 import { ContentTypesData } from "./types/contentTypesData";
 
+/* XR STORE                                           */
 const store = createXRStore({
   controller: false,
   sessionInit: {
@@ -22,6 +24,7 @@ const store = createXRStore({
 /* Quiz loader */
 const quizzes = (import.meta as any).glob("./data/*.json");
 
+/* Props                                              */
 interface AppProps {
   buttonClassName?: string;
   buttonText?: string | JSX.Element;
@@ -31,6 +34,8 @@ interface AppProps {
   topic: TopicData;
 }
 
+
+/* App                                                */
 export default function App({
   buttonClassName = "start-button",
   buttonText = "Enter AR",
@@ -43,18 +48,17 @@ export default function App({
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizData, setQuizData] = useState<any[] | null>(null);
   const [canStartQuiz, setCanStartQuiz] = useState(false);
+  const [activeLocation, setActiveLocation] = useState<any | null>(null);
 
 
-  /* ENTER AR                                           */
-  
+  /* ENTER AR                                          */
   const handleEnterAR = async () => {
     await store.enterAR();
     setInAR(true);
   };
 
- 
+  
   /* LOCATION + QUIZ LOAD                               */
- 
   useEffect(() => {
     if (!inAR) return;
 
@@ -73,6 +77,8 @@ export default function App({
 
       if (!found) return;
 
+      setActiveLocation(found);
+
       const quizPath = `./data/${found.quizFile}`;
       const loader = quizzes[quizPath];
       if (!loader) return;
@@ -83,53 +89,63 @@ export default function App({
     });
   }, [inAR]);
 
+  /* Render                                            */
   return (
     <>
-      {/* START UI */}
+      {/* START UI (NICHT AR) */}
       {!inAR && (
         <div className="button-group">
           <button className={buttonClassName} onClick={handleEnterAR}>
             {buttonText}
           </button>
-          <button className={buttonClassName}>{view3dButtonText}</button>
+          <button className={buttonClassName}>
+            {view3dButtonText}
+          </button>
         </div>
       )}
 
-      {/* AR */}
+      {/* AR CANVAS */}
       <Canvas style={{ width: "100%", height: "100%" }}>
         <XR store={store}>
           <IfInSessionMode allow="immersive-ar">
+            {/* Szene */}
             <IndexPage
               contentTypes={content_types}
               sceneData={scene}
               topicData={topic}
             />
 
-            {/* AR Quiz-Button */}
-            {canStartQuiz && !showQuiz && (
-              <group position={[0, 1, -1.2]}>
+            {/* Standortabhängiger Quiz-Button  */}
+            {canStartQuiz && activeLocation && !showQuiz && (
+              <group position={[0, 1, -1.4]}>
                 <mesh onPointerDown={() => setShowQuiz(true)}>
-                  <boxGeometry args={[0.65, 0.28, 0.1]} />
-                  <meshStandardMaterial color="#187852" />
+                  <boxGeometry args={[0.9, 0.32, 0.1]} />
+                  <meshStandardMaterial
+                    color={activeLocation.button?.color ?? "#187852"}
+                  />
                 </mesh>
+
+                {/* ZENTRIERTER TEXT */}
                 <Text
                   position={[0, 0, 0.09]}
-                  fontSize={0.07}
+                  fontSize={0.065}
                   color="black"
                   anchorX="center"
                   anchorY="middle"
+                  maxWidth={0.8}
+                  textAlign="center"
                 >
-                  Quiz starten
+                  {activeLocation.button?.label ?? "Quiz starten"}
                 </Text>
               </group>
             )}
 
-            {/* QuizPlane direkt in AR */}
+            {/* QuizPlane in AR                  */}
             {showQuiz && quizData && (
               <QuizPlane
                 questions={quizData}
                 onClose={() => setShowQuiz(false)}
-                position={[0, 1, -1]} // z.B. vor dem Nutzer
+                position={[0, 1, -1.7]} // bewusst weiter weg
               />
             )}
           </IfInSessionMode>
