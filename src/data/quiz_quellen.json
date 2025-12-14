@@ -1,16 +1,16 @@
 [
   {
-    "question": "Warum werden Quallen als Nahrungsmittel erforscht?",
+    "question": "Warum werden Mangrovenqualle als Nahrungsmittel erforscht?",
     "options": ["Sie sind giftig", "Sie sind selten", "Sie könnten eine neue Proteinquelle sein"],
     "correct": 2
   },
   {
-    "question": "Warum sind flache Gewässer mit Mikroalgen wichtig für Quallen?",
+    "question": "Warum sind flache Gewässer mit Mikroalgen wichtig für Mangrovenqualle?",
     "options": ["Sie machen Wasser trüb", "Sie sind ihre Lebensgrundlage", "Sie töten Quallen"],
     "correct": 1
   },
   {
-    "question": "Was bedeutet „Symbiose“ bei Quallen?",
+    "question": "Was bedeutet „Symbiose“ bei Mangrovenqualle?",
     "options": ["Kampf zwischen Arten", "Zusammenleben mit Mikroalgen zum Vorteil beider", "Krankheit"],
     "correct": 1
   },
@@ -20,7 +20,7 @@
     "correct": 0
   },
   {
-    "question": "Warum sind Mikroalgen für Quallen lebenswichtig?",
+    "question": "Warum sind Mikroalgen für Mangrovenqualle lebenswichtig?",
     "options": ["Sie machen das Wasser sauber", "Sie liefern Energie durch Licht (Photosynthese)", "Sie schützen vor Fischen"],
     "correct": 1
   }

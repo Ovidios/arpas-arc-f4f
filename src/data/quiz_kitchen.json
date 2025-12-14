@@ -6,7 +6,7 @@
   },
   {
     "question": "Warum werden Insekten als Nahrungsmittel immer wichtiger?",
-    "options": ["Sie brauchen viel Platz", "Sie sind proteinreich und umweltfreundlich", "Sie sind teuer"],
+    "options": ["Sie brauchen viel Platz", "Sie sind proteinreich und umweltfreundlich und können nachhaltig angezogen werden", "Sie sind teuer"],
     "correct": 1
   },
   {
@@ -26,7 +26,7 @@
   }, 
   {
     "question": "Warum sind Makroalgen, Quallen, Salzpflanzen und Grillen wichtig für die Zukunft?",
-    "options": ["Sie sind exotisch", "Sie können auch unter schwierigen Bedingungen Nahrung liefern", "Sie sind teuer"],
+    "options": ["Sie sind exotisch", "sie bieten neue und alternative Nahrungsquellen", "Sie sind teuer"],
     "correct": 1
   }
 ]
