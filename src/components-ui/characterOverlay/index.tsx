@@ -4,12 +4,14 @@ type Props = {
   lines: string[];
   characterImageSrc?: string;
   isVisible?: boolean;
+  onFinished?: () => void;
 };
 
 const CharacterOverlay: React.FC<Props> = ({
   lines,
   characterImageSrc,
   isVisible = true,
+  onFinished,
 }) => {
   const [dialogIndex, setDialogIndex] = useState(0);
 
@@ -21,7 +23,16 @@ const CharacterOverlay: React.FC<Props> = ({
   if (!isVisible || !lines?.length) return null;
 
   const canPrev = dialogIndex > 0;
-  const canNext = dialogIndex < lines.length - 1;
+  const isLastLine = dialogIndex >= lines.length - 1;
+  const canNext = !isLastLine || !!onFinished;
+
+  const goNext = () => {
+    if (isLastLine) {
+      onFinished?.();
+      return;
+    }
+    setDialogIndex((i) => Math.min(lines.length - 1, i + 1));
+  };
 
   return (
     <div className="character-overlay">
@@ -49,7 +60,7 @@ const CharacterOverlay: React.FC<Props> = ({
           <button
             type="button"
             className="bubble-btn next"
-            onClick={() => setDialogIndex((i) => Math.min(lines.length - 1, i + 1))}
+            onClick={goNext}
             disabled={!canNext}
             aria-label="Nächste Nachricht"
           >

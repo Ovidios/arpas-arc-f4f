@@ -12,8 +12,8 @@
         "id": "cafeteria",
         "name": "Cafeteria",
         "geo": {
-            "lat": 52.45173, 
-            "lon": 13.47742,
+            "lat": 52.45573, 
+            "lon": 13.52483,
             "radiusM": 40
         }
     },
@@ -30,9 +30,9 @@
         "id": "h-gebäude",
         "name": "H-Bebäude",
         "geo": {
-            "lat": 52.45505, 
-            "lon":13.52535,
-            "radiusM": 40
+            "lat": 52.45159, 
+            "lon":13.47735,
+            "radiusM": 500
         }
     }
 

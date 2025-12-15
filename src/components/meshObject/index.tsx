@@ -44,12 +44,27 @@ const MeshObject = ({
         let isMounted = true;
         let retryCount = 0; // Track the number of retries
         const maxRetries = 5; // Set a maximum number of retries
+        let stopRetrying = false;
+        let loadModelInterval: ReturnType<typeof setInterval> | null = null;
+        let toggleLabelInterval: ReturnType<typeof setInterval> | null = null;
 
         const loadModel = async () => {
+            if (stopRetrying) return;
 
             // Skip loading if modelUrl is already set
             if (modelUrl) {
-                // console.log(`Model already loaded: ${meshObjectId}`);
+                return;
+            }
+
+            const hasDirectUrl = Boolean(meshObjectUrl);
+            const canUseMinio = !hasDirectUrl && !!minioData;
+
+            if (!hasDirectUrl && !canUseMinio) {
+                console.warn("No mesh URL or MinIO data provided for mesh object with id:", meshObjectId);
+                stopRetrying = true;
+                setLoading(false);
+                setShowLabel(false);
+                removeScreenMessage(`loading_model_${meshObjectId}`);
                 return;
             }
 
@@ -60,21 +75,16 @@ const MeshObject = ({
             try {
                 let blobUrl: string;
                 let wasCached = false;
-                if (meshObjectUrl) {
+                if (hasDirectUrl) {
                     // If meshObjectUrl is provided, use it directly
-                    blobUrl = meshObjectUrl;
+                    blobUrl = meshObjectUrl as string;
                     const result = await fetchGLTFModel(meshObjectId, blobUrl);
                     wasCached = result.wasCached;
                 } else {
                     console.log("Presigned URL not provided, try fetching from MinIO...");
 
-                    if (!minioData) {
-                        console.error("Minio client data is missing for mesh object with id:", meshObjectId);
-                        // Remove loading message if failed
-                        return;
-                    }
                     // Fetch the model URL from MinIO
-                    const result = await fetchGLTFModelFromMinio(meshObjectId, minioData);
+                    const result = await fetchGLTFModelFromMinio(meshObjectId, minioData!);
                     blobUrl = await result.blobUrl; // Wait for the Blob URL to be ready
                     wasCached = result.wasCached;
                 }
@@ -102,9 +112,10 @@ const MeshObject = ({
                 retryCount++;
                 removeScreenMessage(`loading_model_${meshObjectId}`);
                 if (retryCount >= maxRetries) {
+                    stopRetrying = true;
                     setLoading(false);
-                    clearInterval(loadModelInterval);
-                    clearInterval(toggleLabelInterval);
+                    if (loadModelInterval) clearInterval(loadModelInterval);
+                    if (toggleLabelInterval) clearInterval(toggleLabelInterval);
                     setShowLabel(false);
                     addScreenMessage(`Model ${modelName} failed to load!`, `model_faild_to_load${meshObjectId}`, 7000, "red");
                 } else {
@@ -115,13 +126,19 @@ const MeshObject = ({
 
         loadModel();
 
-        const toggleLabelInterval = setInterval(() => setShowLabel((prev) => !prev), 3000); // Toggle label every few seconds
-        const loadModelInterval = setInterval(loadModel, 10000); // Retry to load model every 10 seconds
+        toggleLabelInterval = setInterval(() => {
+            if (stopRetrying) return;
+            setShowLabel((prev) => !prev);
+        }, 3000); // Toggle label every few seconds
+        loadModelInterval = setInterval(() => {
+            if (stopRetrying) return;
+            loadModel();
+        }, 10000); // Retry to load model every 10 seconds
 
         return () => {
             isMounted = false;
-            clearInterval(loadModelInterval);
-            clearInterval(toggleLabelInterval);
+            if (loadModelInterval) clearInterval(loadModelInterval);
+            if (toggleLabelInterval) clearInterval(toggleLabelInterval);
             // Remove loading message on unmount
             removeScreenMessage(`loading_model_${meshObjectId}`);
         };
