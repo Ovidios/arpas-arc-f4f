@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { gpsToPosition } from "../../utility/geolocation";
 import { Position } from "../../types/transform";
-import { nullCoordinates } from "../../components/locationObjects/geolocation";
-import { getMedian, getWeightedAverage, removeOutliers } from "../../utility/filtering";
+import { getWeightedAverage, removeOutliers } from "../../utility/filtering";
+import useLocationStore from "../../store/locationStore";
 
 /**
  * A React hook that processes real-time geolocation data to determine a stable reference location.
@@ -39,6 +39,11 @@ export default function useWorldPositionReference(
     updateReferenceLocation?: (referenceLocation: { coordinates: GeolocationCoordinates; position: Position }) => void
 ): [{ coordinates: GeolocationCoordinates; position: Position } | null, { coordinates: GeolocationCoordinates; position: Position } | null] {
 
+    const { origin, setOrigin } = useLocationStore((state) => ({
+        origin: state.origin,
+        setOrigin: state.setOrigin,
+    }));
+
     const [blockLocationUpdateTime, setBlockLocationUpdateTime] = useState<number>(Date.now());
     const [currentLocation, setCurrentLocation] = useState<{ coordinates: GeolocationCoordinates; position: Position } | null>(null);
     const [locationReference, setLocationReference] = useState<{ coordinates: GeolocationCoordinates; position: Position } | null>(null);
@@ -52,6 +57,7 @@ export default function useWorldPositionReference(
             return;
         }
 
+        // Freeze the origin to the very first reliable GPS reading
         const currentTime = Date.now();
 
         if (currentTime - lastCalculationTime < 1000) return; // Reduce calculation frequency
@@ -90,7 +96,12 @@ export default function useWorldPositionReference(
         }
         setPrevCoordinates(coordinates);
 
-        const position = gpsToPosition(nullCoordinates, coordinates);
+        if (!origin) {
+            setOrigin(coordinates);
+        }
+        const effectiveOrigin = origin ?? coordinates;
+
+        const position = gpsToPosition(effectiveOrigin, coordinates);
 
         position.y = 0; // set altitute: 0
         setCurrentLocation({ coordinates, position });

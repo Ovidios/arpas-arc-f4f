@@ -47,6 +47,7 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
     const getPosition = useLocationStore((state) => state.getPosition);
     const [dialogKey, setDialogKey] = useState("default");
     const [characterLines, setCharacterLines] = useState(dialogContent.default?.lines ?? []);
+    const [showCharacterOverlay, setShowCharacterOverlay] = useState(true);
 
     // UI values
     const fontSize = 22;
@@ -55,6 +56,8 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
 
     // Location values
     const [worldPosition] = useWorldPosition(20, 2);
+    //temporär:
+    //const [worldPosition] = useState<Position>(new Position(0, 0, -2)); // Test-Stub
     const [fixedWorldPosition, setFixedWorldPosition] = useState<Position | null>(null);
 
     // Compass values
@@ -72,6 +75,12 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
     const setCurrentVariant = useCallback((objectId: number, variantId: number) => {
         setSelectedVariants((prev) => ({ ...prev, [objectId]: variantId }));
     }, []);
+
+   /*  useEffect(() => {
+        if (fixedWorldPosition || !worldPosition) return;
+        if (worldPosition.length() < 0.1) return; // ignoriert den 0/0/0-Fallback
+        setFixedWorldPosition(worldPosition);
+    }, [worldPosition, fixedWorldPosition]); */
 
     const closestSceneObject = useMemo(() => {
         if (!scene.objects?.length) return null;
@@ -105,6 +114,7 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
 
     useEffect(() => {
         setCharacterLines(dialogContent[dialogKey]?.lines ?? dialogContent.default?.lines ?? []);
+        setShowCharacterOverlay(true);
     }, [dialogKey]);
 
     // Apply data
@@ -214,6 +224,8 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
                 <CharacterOverlay
                     lines={characterLines}
                     characterImageSrc={`${import.meta.env.BASE_URL}images/character/guide.png`}
+                    isVisible={showCharacterOverlay}
+                    onFinished={() => setShowCharacterOverlay(false)}
                 />
 
 
@@ -303,4 +315,3 @@ const IndexPage = ({ contentTypes, sceneData, topicData, minioData }:
 };
 
 export default IndexPage;
-

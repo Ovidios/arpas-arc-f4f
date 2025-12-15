@@ -1,50 +1,50 @@
 import { create } from "zustand";
 import { Position } from "../types/transform";
-import { nullCoordinates } from "../components/locationObjects/geolocation";
 import { gpsToMeters } from "../utility/geolocation";
 
 interface LocationState {
-    locations: Record<string, Position>;
-    getPosition: (latitude: number, longitude: number) => Position;
+    origin: GeolocationCoordinates | null;
+    setOrigin: (coords: GeolocationCoordinates) => void;
+    setOriginOnce: (coords: GeolocationCoordinates) => void;
+    // Backward-compatible alias (older code expects getPosition)
+    getPosition: (lat: number, lon: number) => Position;
+    getStaticPosition: (lat: number, lon: number) => Position;
 }
 
 const useLocationStore = create<LocationState>((set, get) => ({
-    locations: {},
+    origin: null,
 
-    getPosition: (latitude, longitude) => {
-        const key = `${latitude},${longitude}`; // Unique key for caching
+    // Set origin explicitly (used internally once we have a reliable reading)
+    setOrigin: (coords) => set({ origin: coords }),
 
-        // Return cached position if it exists
-        const location = get().locations[key]; 
-        if (location) {
-            return location;
-        }
+    // 🔒 Origin wird NUR EINMAL gesetzt
+    setOriginOnce: (coords) =>
+        set((state) => {
+            if (state.origin) return state;
+            return { origin: coords };
+        }),
 
-        // Create a valid GeolocationCoordinates instance
-        const coordinates: GeolocationCoordinates = {
-            latitude,
-            longitude,
+    // 🔙 alias für ältere Aufrufe
+    getPosition: (lat, lon) => get().getStaticPosition(lat, lon),
+
+    // 🧱 Statische Objektposition relativ zum Origin
+    getStaticPosition: (lat, lon) => {
+        const origin = get().origin;
+        if (!origin) return new Position();
+
+        const target: GeolocationCoordinates = {
+            latitude: lat,
+            longitude: lon,
             altitude: 0,
-            heading: 0,
             accuracy: 0,
             altitudeAccuracy: null,
+            heading: 0,
             speed: 0,
-            toJSON: () => ({ latitude, longitude }),
+            toJSON: () => ({ latitude: lat, longitude: lon }),
         };
 
-        // Convert GPS coordinates to meters
-        const { x, z } = gpsToMeters(nullCoordinates, coordinates);
-        const newPosition = new Position(x, 0, z);
-
-        // Store the calculated position
-        setTimeout(() => {
-            set((state) => ({
-                locations: { ...state.locations, [key]: newPosition },
-            }));
-            console.log(`Save new ${newPosition} with key: ${key}`);
-        }, 0);
-
-        return newPosition;
+        const { x, y, z } = gpsToMeters(origin, target);
+        return new Position(x, y, z);
     },
 }));
 
