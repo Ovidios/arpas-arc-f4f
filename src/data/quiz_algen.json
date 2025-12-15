@@ -23,5 +23,11 @@
     "question": "Wie hoch ist ca. der Proteingehalt von Grünalgen?",
     "options": ["60 %", "25 %", "5 %"],
     "correct": 1
+  },
+
+  {
+    "question": "Welche besondere Vitaminvorstufe steckt in Grünalgen?",
+    "options": [" Vitamin C", "Beta-Carotin", "Eisen"],
+    "correct": 1
   }
 ]

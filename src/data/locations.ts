@@ -13,12 +13,13 @@ export const quizLocations = [
     },
       
     },
-    {
+    { // zum testen 
       id: "algen",
       name: "Gebäude A – Algenlabor",
      // richtige  coords: { lat: 52.45760819746655, lon: 13.526006690399026 },
      //gebäude H
-      coords: { lat: 52.45513200191987, lon: 13.52537978909434 }, 
+     // coords: { lat: 52.45513200191987, lon: 13.52537978909434 }, 
+     coords: { lat: 52.540636660690225, lon: 13.391817612557453 },  
       radius: 50,
       quizFile: "quiz_algen.json",
 
