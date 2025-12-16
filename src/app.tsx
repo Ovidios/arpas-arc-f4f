@@ -12,6 +12,7 @@ import { distanceInMeters } from "./utility/geo";
 import { SceneData } from "./types/objectData";
 import { TopicData } from "./types/topicData";
 import { ContentTypesData } from "./types/contentTypesData";
+import InfoPlanes from "./components/InfoPlane";
 
 /* XR STORE                                           */
 const store = createXRStore({
@@ -148,6 +149,12 @@ export default function App({
                 position={[0, 1, -1.7]} // bewusst weiter weg
               />
             )}
+
+            {/* INFO-PLANE ZU DEN ALGENTANKS */}
+<InfoPlanes
+  position={[3, 0.5, -1]}
+  rotation={[0, -0.3, 0]}
+/>
           </IfInSessionMode>
         </XR>
       </Canvas>
